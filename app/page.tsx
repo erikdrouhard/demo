@@ -51,7 +51,7 @@ export default function Home() {
                 Thank you for joining our waitlist!
               </p>
               <p className="text-green-600 dark:text-green-400 text-sm mt-1">
-                We'll notify you when we're ready to launch.
+                We&apos;ll notify you when we&apos;re ready to launch.
               </p>
             </div>
           </div>
