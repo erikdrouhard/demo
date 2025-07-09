@@ -172,10 +172,10 @@ export function ExportImport({ tasks, onImportTasks, children }: ExportImportPro
         throw new Error("Invalid format: 'tasks' array is required");
       }
 
-      const importedTasks: Task[] = data.tasks.map((task: Record<string, any>) => ({
+      const importedTasks: Task[] = data.tasks.map((task: Record<string, unknown>) => ({
         ...task,
-        createdAt: new Date(task.createdAt),
-        dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+        createdAt: new Date(task.createdAt as string),
+        dueDate: task.dueDate ? new Date(task.dueDate as string) : undefined,
       }));
 
       // Validate each task has required fields

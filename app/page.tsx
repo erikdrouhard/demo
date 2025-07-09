@@ -14,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-4 relative">
       <div className="max-w-md w-full space-y-8 text-center">
         <div className="space-y-4">
           <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 font-[family-name:var(--font-geist-sans)]">
@@ -57,6 +57,9 @@ export default function Home() {
           </div>
         )}
       </div>
+      
+      {/* Fancy green gradient at bottom */}
+      <div className="fixed bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-emerald-500/20 via-green-400/10 to-transparent pointer-events-none" />
     </div>
   );
 }

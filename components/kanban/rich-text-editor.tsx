@@ -48,8 +48,8 @@ export function RichTextEditor({
           onChange={handleChange}
           preview="edit"
           height={minHeight}
-          data-color-mode="auto"
-          visibleDragBar={false}
+          data-color-mode="light"
+          visibleDragbar={false}
           textareaProps={{
             placeholder,
             style: {
