@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "./rich-text-editor";
 import {
   Select,
   SelectContent,
@@ -18,19 +18,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { Plus, Calendar as CalendarIcon, X } from "lucide-react";
 import { Task } from "@/lib/kanban";
 
 interface AddTaskDialogProps {
   onAddTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   status: Task['status'];
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function AddTaskDialog({ onAddTask, status }: AddTaskDialogProps) {
-  const [open, setOpen] = useState(false);
+export function AddTaskDialog({ 
+  onAddTask, 
+  status, 
+  open: controlledOpen, 
+  onOpenChange 
+}: AddTaskDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = onOpenChange || setInternalOpen;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<Task['priority']>("medium");
+  const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,11 +59,13 @@ export function AddTaskDialog({ onAddTask, status }: AddTaskDialogProps) {
       description: description.trim() || undefined,
       priority,
       status,
+      dueDate,
     });
 
     setTitle("");
     setDescription("");
     setPriority("medium");
+    setDueDate(undefined);
     setOpen(false);
   };
 
@@ -75,11 +95,12 @@ export function AddTaskDialog({ onAddTask, status }: AddTaskDialogProps) {
             />
           </div>
           <div>
-            <Textarea
-              placeholder="Task description (optional)"
+            <RichTextEditor
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={3}
+              onChange={setDescription}
+              placeholder="Task description (optional)"
+              label="Description"
+              minHeight={150}
             />
           </div>
           <div>
@@ -93,6 +114,41 @@ export function AddTaskDialog({ onAddTask, status }: AddTaskDialogProps) {
                 <SelectItem value="high">High Priority</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          <div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !dueDate && "text-muted-foreground"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dueDate ? format(dueDate, "PPP") : "Pick a due date (optional)"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={dueDate}
+                  onSelect={setDueDate}
+                  defaultMonth={dueDate}
+                />
+              </PopoverContent>
+            </Popover>
+            {dueDate && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setDueDate(undefined)}
+                className="mt-2 h-6 text-xs text-slate-500"
+              >
+                <X className="h-3 w-3 mr-1" />
+                Clear due date
+              </Button>
+            )}
           </div>
           <div className="flex gap-2 justify-end">
             <Button
