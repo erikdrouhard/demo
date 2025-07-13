@@ -47,3 +47,6 @@ This is a Next.js 15 application using the App Router architecture with TypeScri
 - Uses ESLint with Next.js and TypeScript configurations
 - Configured for React Server Components (RSC)
 - No database or ORM setup detected yet
+
+### Code Best Practices
+- Always use clear and descriptive variable names
