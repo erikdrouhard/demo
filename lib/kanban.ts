@@ -43,6 +43,7 @@ export function loadTasks(): Task[] {
       ...task,
       priority: task.priority || 'medium', // Default priority for existing tasks
       createdAt: new Date(task.createdAt),
+      dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
     }));
   } catch {
     return [];
